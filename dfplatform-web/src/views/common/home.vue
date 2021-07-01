@@ -19,6 +19,10 @@
         >
       </li>
     </ul>
+    <h3>相关下载</h3>
+    <ul>
+      <li><a @click="downloadCaseFile">点此下载操作文档</a></li>
+    </ul>
     <h3>浏览器兼容性</h3>
     <ul>
       <li>IE 10+</li>
@@ -40,14 +44,33 @@
     <h3>业务架构</h3>
     <ul>
       <span class="el-dropdown-link">
-        <img src="https://img-blog.csdnimg.cn/20210628184027261.jpg" style="max-width:60%" />
+        <img src="~@/assets/img/业务架构.jpg" style="max-width:60%" />
       </span>
     </ul>
     <h3>业务流程</h3>
     <ul>
       <span class="el-dropdown-link">
-        <img src="https://img-blog.csdnimg.cn/20210628184105889.jpg" style="max-width:60%" />
+        <img src="~@/assets/img/业务流程.jpg" style="max-width:60%" />
       </span>
     </ul>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    // 下载用例模板
+    downloadCaseFile () {
+      window.open(
+        window.SITE_CONFIG['baseUrl'] + `/dfplatform/documentDownload`
+      )
+    }
+  }
+}
+</script>
+
+<style>
+.mod-home {
+  line-height: 1.5;
+}
+</style>

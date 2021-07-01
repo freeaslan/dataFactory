@@ -1,0 +1,8 @@
+需要在部署后台应用服务器上部署httpd，用于报告的展示，当然也可以用nginx.
+部署好后，需要把httpd的端口号配置在application.properties文件中的httpdPort值
+
+1、使用yum install httpd命令安装httpd
+2、安装成功后默认端口号是80，可以在/etc/httpd/conf下修改httpd.conf文件中的Listen的值。如果修改需要同步修改application.properties中httpPort值
+3、安装成功后文件默认路径为/var/www/html，默认即可。如果修改需要同步修改application.properties中httpDocumentRoot值
+4、service httpd start 启动httpd
+5、service httpd stop  停止httpd
