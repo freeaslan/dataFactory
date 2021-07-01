@@ -108,7 +108,7 @@ public class FileUtil {
             String fileName = file.getOriginalFilename();
             DfplaformUtil.state(StringUtils.endsWith(fileName, ".jar") ||
                     StringUtils.endsWith(fileName, ".class"), "只能上传.class或者.jar文件");
-            DfplaformUtil.state(StringUtils.contains(fileName, "..//"), "文件名不能包含../符号");
+            DfplaformUtil.state(!StringUtils.contains(fileName, "..//"), "文件名不能包含../符号");
             File directory = new File("");
             String path = directory.getCanonicalPath() + "/src/main/uploadfile/";
             String filePath = path + file.getOriginalFilename();
