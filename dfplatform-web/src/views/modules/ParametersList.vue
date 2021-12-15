@@ -301,6 +301,15 @@
         >
       </span>
     </el-dialog>
+    <div class="pagination">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        ref="Pagination"
+        layout="prev, pager, next"
+        :total="total"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -309,7 +318,6 @@ export default {
   data () {
     return {
       dfp_url: window.SITE_CONFIG.baseUrl,
-      // userId: window.localStorage.getItem('userId'),
       userId: window.localStorage.getItem('userId'),
       labelPosition: 'left',
       tableData: [],
@@ -351,21 +359,19 @@ export default {
     }
   },
   created () {
-    this.getData()
+   var val = 0
+   this.getData()
   },
   computed: {
     data () {
       return this.tableData.filter(d => {
-        // eslint-disable-next-line camelcase
         let is_del = false
         for (let i = 0; i < this.del_list.length; i++) {
           if (d.name === this.del_list[i].name) {
-            // eslint-disable-next-line camelcase
             is_del = true
             break
           }
         }
-        // eslint-disable-next-line camelcase
         if (!is_del) {
           if (
             d.address.indexOf(this.select_cate) > -1 &&
@@ -428,9 +434,9 @@ export default {
           }
           this.addVisible = false
           this.addform = { isNeedBody: 1, afterOtherParam: 1 }
-          this.search()
+          var val = 0
+          this.search(val)
         })
-        // eslint-disable-next-line handle-callback-err
         .catch(err => {
           this.$message.error(err.response.data.message)
         })
@@ -466,7 +472,8 @@ export default {
             })
           }
           this.cancel_edid()
-          this.search()
+          var val = 0
+          this.search(val)
         })
         // eslint-disable-next-line handle-callback-err
         .catch(err => {
@@ -494,14 +501,21 @@ export default {
       this.search(val)
     },
     // 搜索
-    search () {
+    search (val) {
+      let _this = this
+      if (val === this.cur_page) {
+        var pageNum = val - 1
+      } else {
+        var pageNum = 0
+        this.$refs.Pagination.internalCurrentPage = 1
+      }
       var url = this.dfp_url + '/dfplatform/queryPublicParamByPage'
       this.$axios
         .post(url, {
           paramKey: this.searchform.paramKey,
           paramClassPath: this.searchform.paramClassPath,
-          pageIndex: 0,
-          pageSize: 10
+          pageIndex: pageNum,
+          pageSize: 20
         })
         .then(res => {
           var datas = res.data
@@ -531,12 +545,18 @@ export default {
           console.log(error)
         })
     },
-    getData () {
+    getData (val) {
+      let _this = this
+      if (val === this.cur_page) {
+        var pageNum = val - 1
+      } else {
+        var pageNum = 0
+      }
       var url = this.dfp_url + '/dfplatform/queryPublicParamByPage'
       this.$axios
         .post(url, {
-          pageIndex: 0,
-          pageSize: 10
+          pageIndex: pageNum,
+          pageSize: 20
         })
         .then(res => {
           var datas = res.data
@@ -575,6 +595,7 @@ export default {
       if (fileExt === 'jar' || fileExt === 'class') {
         var formData = new FormData()
         formData.append('file', file)
+        formData.append('userId', window.localStorage.getItem('userId'))
         var options = {
           // 设置axios的参数
           url: url,

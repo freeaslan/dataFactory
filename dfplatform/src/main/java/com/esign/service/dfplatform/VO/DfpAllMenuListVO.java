@@ -12,5 +12,11 @@ import java.util.List;
 @Data
 public class DfpAllMenuListVO {
 
+    int pageIndex;
+
+    int pageSize;
+
+    long totalNum;
+
     List<DfpMenuModelVO> menuList;
 }

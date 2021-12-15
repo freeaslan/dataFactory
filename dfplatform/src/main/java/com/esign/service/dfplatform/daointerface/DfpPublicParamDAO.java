@@ -14,4 +14,6 @@ public interface DfpPublicParamDAO extends JpaRepository<DfpPublicParamModel, Lo
     DfpPublicParamModel findById(int id);
 
     DfpPublicParamModel findByParamKey(String keyName);
+
+    void deleteById(int id);
 }

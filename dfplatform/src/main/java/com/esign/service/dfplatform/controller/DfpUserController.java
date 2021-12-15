@@ -3,6 +3,7 @@ package com.esign.service.dfplatform.controller;
 import com.esign.service.dfplatform.BO.DfpUserBO;
 import com.esign.service.dfplatform.BO.DfpUserListBO;
 import com.esign.service.dfplatform.VO.DfpUserListVO;
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.model.DfpUserModel;
 import com.esign.service.dfplatform.service.DfpUserService;
@@ -26,6 +27,7 @@ public class DfpUserController {
     @Autowired
     DfpUserService dfpUserService;
 
+    @OperateLogger(operate = "用户登录")
     @ApiOperation(value = "用户登录")
     @RequestMapping(value = "/userLogin", method = RequestMethod.POST)
     public DfplatformResult<DfpUserModel> userLogin(@RequestBody @Validated DfpUserBO dfpUserBO) {
@@ -34,6 +36,7 @@ public class DfpUserController {
         return result;
     }
 
+    @OperateLogger(operate = "创建新用户")
     @ApiOperation(value = "创建新用户")
     @RequestMapping(value = "/createNewUser", method = RequestMethod.POST)
     public DfplatformResult<DfpUserModel> createNewUser(@RequestBody @Validated DfpUserBO dfpUserBO) {

@@ -2,6 +2,7 @@ package com.esign.service.dfplatform.daointerface;
 
 import com.esign.service.dfplatform.model.DfpMenuModel;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * @Description: dfp_menu表操作
  * @date: 2020/11/16 11:38
  */
-public interface DfpMenuDAO extends JpaRepository<DfpMenuModel, Long> {
+public interface DfpMenuDAO extends JpaRepository<DfpMenuModel, Long>, JpaSpecificationExecutor<DfpMenuModel> {
 
     List<DfpMenuModel> findByType(int type);
 

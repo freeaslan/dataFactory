@@ -25,4 +25,8 @@ public class DfpMenuModel {
     int type;
 
     String icon;
+
+    int creatorId;
+
+    int modifierId;
 }

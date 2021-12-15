@@ -35,4 +35,8 @@ public class DfpApisModel {
     String header;
 
     String requestBody;
+
+    int creatorId;
+
+    int modifierId;
 }

@@ -104,6 +104,7 @@ public class DfpSwaggerService {
                         //获取接口描述信息
                         String summary = methodMessage.getString("summary");
                         dfpApisModel.setSummary(summary);
+                        dfpApisModel.setModifierId(dfpSwaggerBO.getUserId());
                         //获取接口所属tag
                         JSONArray tags = methodMessage.getJSONArray("tags");
                         if (tags != null && tags.size() > 0) {
@@ -117,10 +118,13 @@ public class DfpSwaggerService {
                         if (dfpApisModelCheck != null) {
 
                             int id = dfpApisModelCheck.getId();
+                            int creatorId = dfpApisModelCheck.getCreatorId();
                             ObjectConverterUtil.convert(dfpApisModel, dfpApisModelCheck);
                             dfpApisModelCheck.setId(id);
+                            dfpApisModelCheck.setCreatorId(creatorId);
                             dfpApisDAO.save(dfpApisModelCheck);
                         } else {
+                            dfpApisModel.setCreatorId(dfpSwaggerBO.getUserId());
                             dfpApisDAO.save(dfpApisModel);
                         }
                     }

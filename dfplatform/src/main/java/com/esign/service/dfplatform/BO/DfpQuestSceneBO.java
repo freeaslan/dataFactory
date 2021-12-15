@@ -24,4 +24,6 @@ public class DfpQuestSceneBO {
     int envId;
 
     List<DfpRequestParamsBO> dfpRequestParamsBOs;
+
+    int userId;
 }

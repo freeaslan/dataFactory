@@ -3,6 +3,7 @@ package com.esign.service.dfplatform.controller;
 import com.esign.service.dfplatform.BO.DfpEnvParamsBO;
 import com.esign.service.dfplatform.BO.DfpQueryEnvParamsBO;
 import com.esign.service.dfplatform.VO.DfpEnvParamsVO;
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.model.DfpEnvEnumModel;
 import com.esign.service.dfplatform.model.DfpEnvParamsModel;
@@ -10,10 +11,7 @@ import com.esign.service.dfplatform.service.DfpEnvParamsService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -29,7 +27,8 @@ public class DfpEnvParamsController {
     @Autowired
     DfpEnvParamsService dfpCommonParamsService;
 
-    @ApiOperation(value = "新增环境公共参数")
+    @OperateLogger(operate = "新增环境参数")
+    @ApiOperation(value = "新增环境参数")
     @RequestMapping(value = "/addCommonParams", method = RequestMethod.POST)
     public DfplatformResult<DfpEnvParamsModel> addCommonParams(@RequestBody @Validated DfpEnvParamsBO dfpEnvParamsBO) {
 
@@ -37,7 +36,8 @@ public class DfpEnvParamsController {
         return result;
     }
 
-    @ApiOperation(value = "修改环境公共参数")
+    @OperateLogger(operate = "编辑环境参数")
+    @ApiOperation(value = "编辑环境参数")
     @RequestMapping(value = "/editCommonParams", method = RequestMethod.POST)
     public DfplatformResult<DfpEnvParamsModel> editCommonParams(@RequestBody @Validated DfpEnvParamsBO dfpEnvParamsBO) {
 
@@ -45,7 +45,16 @@ public class DfpEnvParamsController {
         return result;
     }
 
-    @ApiOperation(value = "获取环境公共参数列表")
+    @OperateLogger(operate = "删除环境参数")
+    @ApiOperation(value = "删除环境参数")
+    @RequestMapping(value = "/deleteEnvParams", method = RequestMethod.POST)
+    public DfplatformResult<Integer> deleteEnvParams(@RequestParam int userId, @RequestParam int id) {
+
+        DfplatformResult<Integer> result = dfpCommonParamsService.deleteEnvParams(id);
+        return result;
+    }
+
+    @ApiOperation(value = "获取环境参数列表")
     @RequestMapping(value = "/getCommonParamsList", method = RequestMethod.POST)
     public DfplatformResult<DfpEnvParamsVO> getCommonParamsList(@RequestBody DfpQueryEnvParamsBO dfpQueryEnvParamsBO) {
 

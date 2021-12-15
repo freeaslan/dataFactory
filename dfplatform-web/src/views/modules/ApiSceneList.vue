@@ -413,9 +413,6 @@ export default {
     })
   },
   methods: {
-    // gotoLink () {
-    //   window.open(this.gotoLinkUrl, '_blank')
-    // },
     focusEnvName () {
       // 根据项目名获取服务名
       var url = this.dfp_url + '/dfplatform/getAllEnvEnum'
@@ -506,6 +503,7 @@ export default {
       sendbody['sceneId'] = this.reSceneId
       sendbody['envId'] = this.selectsurroundings
       sendbody['projectName'] = this.modelform.project
+      sendbody['userId'] = window.localStorage.getItem('userId')
       this.$axios
         .post(url, sendbody, {
           headers: {
@@ -560,13 +558,10 @@ export default {
       this.search(val)
     },
     getData (val) {
-      // eslint-disable-next-line no-unused-vars
       let _this = this
       if (val === this.cur_page) {
-        // eslint-disable-next-line no-unused-vars
         var pageNum = val - 1
       } else {
-        // eslint-disable-next-line no-redeclare
         var pageNum = 0
       }
       var url = this.dfp_url + '/dfplatform/getSceneList'
@@ -574,8 +569,8 @@ export default {
         .post(url, {
           sceneName: '',
           moduleId: '',
-          pageIndex: 0,
-          pageSize: 10,
+          pageIndex: pageNum,
+          pageSize: 20,
           projectName: this.Swaggerform.project
         })
         .then(res => {
@@ -607,17 +602,13 @@ export default {
       if (val === this.cur_page) {
         var pageNum = val - 1
       } else {
-        // eslint-disable-next-line no-redeclare
         var pageNum = 0
         this.$refs.Pagination.internalCurrentPage = 1
       }
       var url = this.dfp_url + '/dfplatform/getSceneList'
-      // eslint-disable-next-line eqeqeq
       if (_this.moduleId == -1) {
-        // eslint-disable-next-line camelcase
         var serach_moduleId = ''
       } else {
-        // eslint-disable-next-line camelcase,no-redeclare
         var serach_moduleId = _this.moduleId
       }
       this.$axios
@@ -625,7 +616,7 @@ export default {
           sceneName: _this.form.scenario,
           moduleId: serach_moduleId,
           pageIndex: pageNum,
-          pageSize: 10,
+          pageSize: 20,
           projectName: this.Swaggerform.project
         })
         .then(res => {
@@ -657,7 +648,8 @@ export default {
       this.$axios
         .post(url, {
           moduleName: this.modelform.modelname,
-          projectName: this.modelform.project
+          projectName: this.modelform.project,
+          userId: window.localStorage.getItem('userId')
         })
         .then(res => {
           var datas = res.data
@@ -684,7 +676,8 @@ export default {
         .post(url, {
           projectName: this.Swaggerform.project,
           serviceName: this.Swaggerform.servicename,
-          swaggerLink: this.Swaggerform.ip
+          swaggerLink: this.Swaggerform.ip,
+          userId: window.localStorage.getItem('userId')
         })
         .then(res => {
           var datas = res.data
@@ -742,7 +735,7 @@ export default {
       })
         .then(() => {
           var url = this.dfp_url + '/dfplatform/deleteScene'
-          this.$axios.delete(url, { params: { sceneId: row.id } }).then(res => {
+          this.$axios.delete(url, { params: { sceneId: row.id, userId: window.localStorage.getItem('userId') } }).then(res => {
             var datas = res.data
             var code = datas.code
             if (code === 0) {

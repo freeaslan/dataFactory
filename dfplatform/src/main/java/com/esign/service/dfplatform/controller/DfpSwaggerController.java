@@ -3,6 +3,7 @@ package com.esign.service.dfplatform.controller;
 import com.esign.service.dfplatform.BO.DfpSwaggerBO;
 import com.esign.service.dfplatform.VO.DfpApisModelVO;
 import com.esign.service.dfplatform.VO.DfpServiceVO;
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.service.DfpSwaggerService;
 import io.swagger.annotations.ApiOperation;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
+/*
  * @Author: huangtai
  * @Description: swagger接口
  * @Date: 2021/6/15 11:45
@@ -24,6 +25,7 @@ public class DfpSwaggerController {
     @Autowired
     DfpSwaggerService dfpSwaggerService;
 
+    @OperateLogger(operate = "导入swagger")
     @ApiOperation(value = "导入swagger")
     @RequestMapping(value = "/importSwaggers", method = RequestMethod.POST)
     public DfplatformResult<Integer> importSwaggers(@RequestBody @Validated DfpSwaggerBO dfpSwaggerBO) {

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 /**
- * @Description:  对应数据库表dfp_env_paramsm模型
+ * @Description: 对应数据库表dfp_env_paramsm模型
  * @author: lingxi
  * @date: 2020/11/15 22:33
  **/
@@ -27,4 +27,8 @@ public class DfpEnvParamsModel {
     String host;
 
     String serviceName;
+
+    int creatorId;
+
+    int modifierId;
 }

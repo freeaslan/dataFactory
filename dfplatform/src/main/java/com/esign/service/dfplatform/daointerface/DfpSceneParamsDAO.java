@@ -22,5 +22,5 @@ public interface DfpSceneParamsDAO extends JpaRepository<DfpSceneParamsModel, Lo
 
     List<DfpSceneParamsModel> findBySceneIdAndParamTypeNot(int scendId, String paramType);
 
-    List<DfpSceneParamsModel> findBySceneIdAndParamType(int scendId, String paramType);
+    List<DfpSceneParamsModel> findByParamKeyAndParamType(String paramKey, String paramType);
 }

@@ -17,4 +17,6 @@ public class DfpModuleBO {
 
     @NotBlank(message = "模块名称不能为空")
     String moduleName;
+
+    int userId;
 }

@@ -75,9 +75,17 @@
       ref="addOrUpdate"
       @refreshDataList="getDataList"
     ></add-or-update>
+    <div class="pagination">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        ref="Pagination"
+        layout="prev, pager, next"
+        :total="total"
+      ></el-pagination>
+    </div>
   </div>
 </template>
-
 <script>
 import AddOrUpdate from './menuAddUpdate'
 export default {
@@ -88,7 +96,8 @@ export default {
       dataList: [],
       dataListLoading: false,
       addOrUpdateVisible: false,
-      dfp_url: window.SITE_CONFIG.baseUrl
+      dfp_url: window.SITE_CONFIG.baseUrl,
+      total: 0
     }
   },
   components: {
@@ -98,39 +107,53 @@ export default {
     this.getDataList()
   },
   methods: {
+    // 分页导航
+    handleCurrentChange (val) {
+      this.cur_page = val
+      this.search(val)
+    },
     // 获取数据列表
-    getDataList () {
+    getDataList (val) {
+      let _this = this
+      if (val === this.cur_page) {
+        var pageNum = val - 1
+      } else {
+        var pageNum = 0
+      }
       var url = this.dfp_url + '/dfplatform/getAllMenuList'
       this.dataListLoading = true
-      this.$axios.get(url).then(res => {
-        var datas = res.data
-        if (datas && datas.code === 0) {
-          var menudata = datas.data.menuList
-          var list = []
-          for (var i = 0; i < menudata.length; i++) {
-            var map = {}
-            var item = menudata[i]
-            map.menuId = item.id
-            map.name = item.name
-            map.icon = item.icon
-            map.parentName = item.parentName
-            map.type = item.type
-            map.orderNum = item.orderNum
-            list.push(map)
-            this.dataList = list
+      this.$axios
+        .post(url, {
+          pageIndex: pageNum,
+          pageSize: 20
+        })
+        .then(res => {
+          var datas = res.data
+          var total = datas.data.totalNum
+          this.total = parseInt(total)
+          if (datas && datas.code === 0) {
+            var menudata = datas.data.menuList
+            var list = []
+            for (var i = 0; i < menudata.length; i++) {
+              var map = {}
+              var item = menudata[i]
+              map.menuId = item.id
+              map.name = item.name
+              map.icon = item.icon
+              map.parentName = item.parentName
+              map.type = item.type
+              map.orderNum = item.orderNum
+              list.push(map)
+              this.dataList = list
+            }
           }
-          console.log('dataList:' + JSON.stringify(this.dataList))
-        }
-        // this.dataList = treeDataTranslate(datas, 'menuId')
-        this.dataListLoading = false
-      })
+          this.dataListLoading = false
+        })
     },
     // 新增 / 修改
     addOrUpdateHandle (id, type) {
       this.addOrUpdateVisible = true
-      console.log('menu112')
       this.$nextTick(() => {
-        console.log('menu114')
         this.$refs.addOrUpdate.init(id, type)
       })
     },
@@ -143,20 +166,27 @@ export default {
       })
         .then(() => {
           var url = this.dfp_url + '/dfplatform/deleteMenu'
-          this.$axios.get(url, { params: { id: id } }).then(res => {
-            var datas = res.data
-            if (datas && datas.code === 0) {
-              this.$message({
-                message: '操作成功',
-                type: 'success'
-              })
-              this.getDataList()
-            } else {
-              this.$message.error(datas.msg)
-            }
+          this.$axios
+            .get(url, {
+              params: {
+                id: id,
+                userId: window.localStorage.getItem('userId')
+              }
+            })
+            .then(res => {
+              var datas = res.data
+              if (datas && datas.code === 0) {
+                this.$message({
+                  message: '操作成功',
+                  type: 'success'
+                })
+                this.getDataList()
+              } else {
+                this.$message.error(datas.msg)
+              }
+            })
           })
-        })
-        .catch(() => {})
+          .catch(() => {})
     }
   }
 }

@@ -24,4 +24,6 @@ public class DfpMenuBO {
     int type;
 
     String icon;
+
+    int userId;
 }

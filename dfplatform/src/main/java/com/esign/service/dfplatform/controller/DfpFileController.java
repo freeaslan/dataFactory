@@ -1,5 +1,6 @@
 package com.esign.service.dfplatform.controller;
 
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.util.FileUtil;
 import io.swagger.annotations.ApiOperation;
@@ -20,17 +21,19 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/dfplatform", produces = "application/json")
 public class DfpFileController {
 
-    @ApiOperation(value = "配置文件上传")
+    @OperateLogger(operate = "动态参数文件上传")
+    @ApiOperation(value = "动态参数文件上传")
     @RequestMapping(value = "/filesUpload", method = RequestMethod.POST)
-    public DfplatformResult<String> filesUpload(@RequestParam("file") MultipartFile file) {
+    public DfplatformResult<String> filesUpload(@RequestParam int userId, @RequestParam("file") MultipartFile file) {
 
         DfplatformResult<String> result = FileUtil.filesUpload(file);
         return result;
     }
 
-    @ApiOperation(value = "文档下载")
+    @OperateLogger(operate = "下载操作文档")
+    @ApiOperation(value = "下载使用文章")
     @RequestMapping(value = "/documentDownload", method = RequestMethod.GET)
-    public DfplatformResult<Long> documentDownload(HttpServletResponse response) {
+    public DfplatformResult<Long> documentDownload(@RequestParam int userId, HttpServletResponse response) {
 
         DfplatformResult<Long> defenderResult = FileUtil.documentDownload(response);
         return defenderResult;

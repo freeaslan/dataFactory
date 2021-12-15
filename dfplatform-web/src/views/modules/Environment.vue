@@ -232,6 +232,15 @@
         </el-button>
       </span>
     </el-dialog>
+    <div class="pagination">
+      <el-pagination
+        background
+        @current-change="handleCurrentChange"
+        ref="Pagination"
+        layout="prev, pager, next"
+        :total="total"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 
@@ -261,7 +270,8 @@ export default {
         serviceName: '',
         envId: '',
         host: '',
-        header: '{}'
+        header: '{}',
+        userId: 0
       },
       searchform: {
         projectName: '',
@@ -273,7 +283,8 @@ export default {
         envId: '',
         envName: '',
         host: '',
-        header: '{}'
+        header: '{}',
+        userId: 0
       },
       ServiceData: [],
       table: true,
@@ -316,9 +327,9 @@ export default {
         }
       }
       this.returnProject = list
-      console.log('returnProject99:' + JSON.stringify(this.returnProject))
     })
-    this.search()
+    var val = 0
+    this.search(val)
   },
   computed: {
     data () {
@@ -423,7 +434,6 @@ export default {
       this.editform.envId = row.listEnvId
       this.editform.envName = row.listEnvName
       this.editform.host = row.listHost
-      console.log(row.listHeader)
       this.editform.header = JSON.stringify(JSON.parse(row.listHeader), null, 2)
     },
     // 点击新增按钮
@@ -455,12 +465,8 @@ export default {
             serviceName: serviceName,
             envId: parseInt(envId),
             host: host,
-            header: JSON.parse(header)
-          },
-          {
-            headers: {
-              operator: this.operator
-            }
+            header: JSON.parse(header),
+            userId: window.localStorage.getItem('userId')
           }
           )
           .then(res => {
@@ -478,7 +484,8 @@ export default {
               })
             }
             this.addVisible = false
-            this.search()
+            var val = 0
+            this.search(val)
           })
           // eslint-disable-next-line handle-callback-err
           .catch(err => {
@@ -507,7 +514,8 @@ export default {
           header: header,
           projectName: projectName,
           serviceName: serviceName,
-          envId: envId
+          envId: envId,
+          userId: window.localStorage.getItem('userId')
         },
         {
           headers: {}
@@ -528,7 +536,8 @@ export default {
             })
           }
           this.editrVisible = false
-          this.search()
+          var val = 0
+          this.search(val)
         })
         // eslint-disable-next-line handle-callback-err
         .catch(err => {
@@ -542,8 +551,13 @@ export default {
       this.search(val)
     },
     // 搜索
-    search () {
+    search (val) {
       let _this = this
+      if (val === this.cur_page) {
+        var pageNum = val - 1
+      } else {
+        var pageNum = 0
+      }
       var parentName = sessionStorage.getItem('projectName')
       var projectName = this.searchform.projectName
       var serviceName = this.searchform.serviceName
@@ -555,8 +569,8 @@ export default {
           parentName: parentName,
           projectName: projectName,
           serviceName: serviceName,
-          pageIndex: 0,
-          pageSize: 10
+          pageIndex: pageNum,
+          pageSize: 20
         },
         {
           headers: {}

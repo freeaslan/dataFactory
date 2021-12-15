@@ -2,6 +2,7 @@ package com.esign.service.dfplatform.controller;
 
 import com.esign.service.dfplatform.BO.DfpModuleBO;
 import com.esign.service.dfplatform.VO.DfpModuleVO;
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.service.DfpModuleService;
 import io.swagger.annotations.ApiOperation;
@@ -23,6 +24,7 @@ public class DfpModuleController {
     @Autowired
     DfpModuleService dfpModuleService;
 
+    @OperateLogger(operate = "新增模块")
     @ApiOperation(value = "新增模块")
     @RequestMapping(value = "/addModule", method = RequestMethod.POST)
     public DfplatformResult<DfpModuleVO> addModule(

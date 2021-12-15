@@ -147,6 +147,12 @@ public class FileUtil {
             File directory = new File("");
             String path = directory.getCanonicalPath();
             path = StringUtils.removeEnd(path, "/target") + "/文档/操作文档.docx";
+            if (DfplaformUtil.isWindowsSystem()) {
+
+                //如果是windows系统需要处理下路径
+                path = StringUtils.replace(path, "/", "\\");
+                path = StringUtils.replace(path, "dataFactory\\", "dataFactory\\dfplatform\\");
+            }
             log.info("下载地址：" + path);
             File file = new File(path);
             String fileName = file.getName();
@@ -191,6 +197,6 @@ public class FileUtil {
                 }
             }
         }
-        return null;
+        return defenderResult;
     }
 }

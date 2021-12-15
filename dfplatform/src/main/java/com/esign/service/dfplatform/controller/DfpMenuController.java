@@ -1,9 +1,11 @@
 package com.esign.service.dfplatform.controller;
 
 import com.esign.service.dfplatform.BO.DfpMenuBO;
+import com.esign.service.dfplatform.BO.DfpMenuListBO;
 import com.esign.service.dfplatform.VO.DfpAllMenuListVO;
 import com.esign.service.dfplatform.VO.DfpMenuListVO;
 import com.esign.service.dfplatform.VO.DfpMenuModelVO;
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.model.DfpMenuModel;
 import com.esign.service.dfplatform.service.DfpMenuService;
@@ -41,10 +43,10 @@ public class DfpMenuController {
     }
 
     @ApiOperation(value = "获取所有菜单列表")
-    @RequestMapping(value = "/getAllMenuList", method = RequestMethod.GET)
-    public DfplatformResult<DfpAllMenuListVO> getAllMenuList() {
+    @RequestMapping(value = "/getAllMenuList", method = RequestMethod.POST)
+    public DfplatformResult<DfpAllMenuListVO> getAllMenuList(@RequestBody DfpMenuListBO dfpMenuListBO) {
 
-        DfplatformResult<DfpAllMenuListVO> result = dfpMenuService.getAllMenuList();
+        DfplatformResult<DfpAllMenuListVO> result = dfpMenuService.getAllMenuList(dfpMenuListBO);
         return result;
     }
 
@@ -56,6 +58,7 @@ public class DfpMenuController {
         return result;
     }
 
+    @OperateLogger(operate = "创建目录或者菜单")
     @ApiOperation(value = "创建目录和菜单")
     @RequestMapping(value = "/addMenu", method = RequestMethod.POST)
     public DfplatformResult<DfpMenuModel> addMenu(@RequestBody @Validated DfpMenuBO dfpMenuBO) {
@@ -64,6 +67,7 @@ public class DfpMenuController {
         return result;
     }
 
+    @OperateLogger(operate = "编辑目录或者菜单")
     @ApiOperation(value = "更新目录和菜单")
     @RequestMapping(value = "/updateMenu", method = RequestMethod.POST)
     public DfplatformResult<DfpMenuModel> updateMenu(@RequestBody @Validated DfpMenuBO dfpMenuBO) {
@@ -72,9 +76,10 @@ public class DfpMenuController {
         return result;
     }
 
+    @OperateLogger(operate = "删除目录或者菜单")
     @ApiOperation(value = "删除目录或菜单")
     @RequestMapping(value = "/deleteMenu", method = RequestMethod.GET)
-    public DfplatformResult<Integer> deleteMenu(@RequestParam int id) {
+    public DfplatformResult<Integer> deleteMenu(@RequestParam int userId, @RequestParam int id) {
 
         DfplatformResult<Integer> result = dfpMenuService.deleteMenu(id);
         return result;

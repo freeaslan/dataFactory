@@ -3,20 +3,18 @@ package com.esign.service.dfplatform.controller;
 import com.esign.service.dfplatform.BO.DfpPublicParamBO;
 import com.esign.service.dfplatform.BO.DfpQueryPublicParamBO;
 import com.esign.service.dfplatform.VO.DfpPublicParamListVO;
+import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.model.DfpPublicParamModel;
 import com.esign.service.dfplatform.service.DfpPublicParamService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author: huangtai
- * @Description: 公共参数
+ * @Description: 动态参数
  * @Date: 2021/5/6 9:19
  */
 @RestController
@@ -26,7 +24,8 @@ public class DfpPublicParamController {
     @Autowired
     DfpPublicParamService dfpPublicParamService;
 
-    @ApiOperation(value = "新增公共参数")
+    @OperateLogger(operate = "新增动态参数")
+    @ApiOperation(value = "新增动态参数")
     @RequestMapping(value = "/addPublicParam", method = RequestMethod.POST)
     public DfplatformResult<DfpPublicParamModel> addPublicParam(@RequestBody @Validated DfpPublicParamBO dfpPublicParamBO) {
 
@@ -34,7 +33,8 @@ public class DfpPublicParamController {
         return result;
     }
 
-    @ApiOperation(value = "编辑公共参数")
+    @OperateLogger(operate = "编辑动态参数")
+    @ApiOperation(value = "编辑动态参数")
     @RequestMapping(value = "/editPublicParam", method = RequestMethod.POST)
     public DfplatformResult<DfpPublicParamModel> editPublicParam(@RequestBody @Validated DfpPublicParamBO dfpPublicParamBO) {
 
@@ -47,6 +47,15 @@ public class DfpPublicParamController {
     public DfplatformResult<DfpPublicParamListVO> queryPublicParamByPage(@RequestBody @Validated DfpQueryPublicParamBO dfpQueryPublicParamBO) {
 
         DfplatformResult<DfpPublicParamListVO> result = dfpPublicParamService.queryPublicParamByPage(dfpQueryPublicParamBO);
+        return result;
+    }
+
+    @OperateLogger(operate = "删除动态参数")
+    @ApiOperation(value = "删除动态参数")
+    @RequestMapping(value = "/deleteDynamicParam", method = RequestMethod.POST)
+    public DfplatformResult<Integer> deleteDynamicParam(@RequestParam int userId, @RequestParam int id) {
+
+        DfplatformResult<Integer> result = dfpPublicParamService.deleteDynamicParam(id);
         return result;
     }
 }

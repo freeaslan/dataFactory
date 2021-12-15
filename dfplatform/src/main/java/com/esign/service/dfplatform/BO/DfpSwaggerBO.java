@@ -20,4 +20,6 @@ public class DfpSwaggerBO {
 
     @NotBlank(message = "swagger url不能为空")
     String swaggerLink;
+
+    int userId;
 }

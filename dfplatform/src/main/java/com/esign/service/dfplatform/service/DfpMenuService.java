@@ -1,6 +1,7 @@
 package com.esign.service.dfplatform.service;
 
 import com.esign.service.dfplatform.BO.DfpMenuBO;
+import com.esign.service.dfplatform.BO.DfpMenuListBO;
 import com.esign.service.dfplatform.VO.DfpAllMenuListVO;
 import com.esign.service.dfplatform.VO.DfpMenuListVO;
 import com.esign.service.dfplatform.VO.DfpMenuModelVO;
@@ -15,9 +16,18 @@ import com.esign.service.dfplatform.model.DfpSceneModel;
 import com.esign.service.dfplatform.util.DfplaformUtil;
 import com.esign.service.dfplatform.util.ObjectConverterUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +58,7 @@ public class DfpMenuService {
     public DfplatformResult<DfpMenuModel> addOrModifyMenu(DfpMenuBO dfpMenuBO, boolean isAdd) {
 
         //定义结果
-        DfplatformResult<DfpMenuModel> defaultResult = new DfplatformResult<>();
+        DfplatformResult<DfpMenuModel> defenderResult = new DfplatformResult<>();
 
         //事务
         operateTemplate.operateWithTransaction(new OperateCallBack() {
@@ -68,7 +78,10 @@ public class DfpMenuService {
                     DfplaformUtil.state(dfpMenuBO.getId() > 0, "修改菜单Id不能为空");
                     dfpMenuModel = dfpMenuDAO.findById(dfpMenuBO.getId());
                     DfplaformUtil.isNotNull(dfpMenuModel, "没有匹配的菜单信息");
+                } else {
+                    dfpMenuModel.setCreatorId(dfpMenuBO.getUserId());
                 }
+                dfpMenuModel.setModifierId(dfpMenuBO.getUserId());
             }
 
             @Override
@@ -97,12 +110,12 @@ public class DfpMenuService {
                     dfpMenuModel.setParentId(dfpMenuBO.getParentId());
                 }
                 dfpMenuModel = dfpMenuDAO.save(dfpMenuModel);
-                defaultResult.setMessage("创建成功");
-                defaultResult.setData(dfpMenuModel);
+                defenderResult.setData(dfpMenuModel);
+                defenderResult.setMessage(isAdd ? "新增菜单成功" : "编辑菜单成功");
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
@@ -114,7 +127,7 @@ public class DfpMenuService {
     public DfplatformResult<Integer> deleteMenu(int id) {
 
         //定义返回
-        DfplatformResult<Integer> defaultResult = new DfplatformResult<>();
+        DfplatformResult<Integer> defenderResult = new DfplatformResult<>();
         //事务
         operateTemplate.operateWithTransaction(new OperateCallBack() {
             @Override
@@ -135,17 +148,17 @@ public class DfpMenuService {
 
                 List<DfpMenuModel> dfpMenuModels = dfpMenuDAO.findByParentId(id);
                 DfplaformUtil.state(dfpMenuModels.size() == 0, "该类目下面有子类目不能删除");
-                List<DfpSceneModel> dfpSceneModels = dfpSceneDAO.findByModuleId(id);
 
+                List<DfpSceneModel> dfpSceneModels = dfpSceneDAO.findByModuleId(id);
                 DfplaformUtil.state(dfpSceneModels.size() == 0, "该类目下关联有场景不能删除");
 
                 dfpMenuDAO.delete(getMenuinfo);
-
-                defaultResult.setMessage("删除成功");
+                defenderResult.setMessage("删除菜单成功");
+                defenderResult.setData(id);
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
@@ -153,12 +166,11 @@ public class DfpMenuService {
      *
      * @return
      */
-    public DfplatformResult<DfpAllMenuListVO> getAllMenuList() {
+    public DfplatformResult<DfpAllMenuListVO> getAllMenuList(DfpMenuListBO dfpMenuListBO) {
 
         //定义返回值
         DfplatformResult<DfpAllMenuListVO> defenderResult = new DfplatformResult<>();
         DfpAllMenuListVO dfpMenuListVO = new DfpAllMenuListVO();
-
         //事务
         operateTemplate.operateWithOutTransaction(new OperateCallBack() {
             @Override
@@ -167,26 +179,33 @@ public class DfpMenuService {
 
             @Override
             public void doPacker() {
+
+                dfpMenuListVO.setPageIndex(dfpMenuListBO.getPageIndex());
+                dfpMenuListVO.setPageSize(dfpMenuListBO.getPageSize());
             }
 
             @Override
             public void doOperate() throws Exception {
 
-                Sort sort = new Sort(Sort.Direction.DESC, "id");
                 List<DfpMenuModelVO> dfpMenuModelVOS = new ArrayList<>();
-                List<DfpMenuModel> getMenuList = dfpMenuDAO.findAll(sort);
-                for (DfpMenuModel dfpMenuModel : getMenuList) {
-                    DfpMenuModelVO dfpMenuModelVO = new DfpMenuModelVO();
-                    ObjectConverterUtil.convert(dfpMenuModel, dfpMenuModelVO);
-                    if (dfpMenuModel.getParentId() == 0) {
+                Page<DfpMenuModel> dfpMenuModelPage = getMenuListByPage(dfpMenuListBO);
+                if (dfpMenuModelPage != null) {
 
-                        dfpMenuModelVO.setParentName("一级菜单");
-                    } else {
+                    dfpMenuListVO.setTotalNum(dfpMenuModelPage.getTotalElements());
+                    List<DfpMenuModel> getMenuList = dfpMenuModelPage.getContent();
+                    for (DfpMenuModel dfpMenuModel : getMenuList) {
+                        DfpMenuModelVO dfpMenuModelVO = new DfpMenuModelVO();
+                        ObjectConverterUtil.convert(dfpMenuModel, dfpMenuModelVO);
+                        if (dfpMenuModel.getParentId() == 0) {
 
-                        DfpMenuModel parentMen = dfpMenuDAO.findById(dfpMenuModel.getParentId());
-                        dfpMenuModelVO.setParentName(parentMen.getName());
+                            dfpMenuModelVO.setParentName("一级菜单");
+                        } else {
+
+                            DfpMenuModel parentMen = dfpMenuDAO.findById(dfpMenuModel.getParentId());
+                            dfpMenuModelVO.setParentName(parentMen.getName());
+                        }
+                        dfpMenuModelVOS.add(dfpMenuModelVO);
                     }
-                    dfpMenuModelVOS.add(dfpMenuModelVO);
                 }
                 dfpMenuListVO.setMenuList(dfpMenuModelVOS);
                 defenderResult.setData(dfpMenuListVO);
@@ -299,5 +318,31 @@ public class DfpMenuService {
         }, defenderResult);
 
         return defenderResult;
+    }
+
+    /**
+     * 分页获取数据
+     *
+     * @param dfpMenuListBO
+     * @return
+     */
+    private Page<DfpMenuModel> getMenuListByPage(DfpMenuListBO dfpMenuListBO) {
+
+        //设置排序规则
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(dfpMenuListBO.getPageIndex(), dfpMenuListBO.getPageSize(), sort);
+        Specification<DfpMenuModel> spec = new Specification<DfpMenuModel>() {
+
+            @Nullable
+            @Override
+            public Predicate toPredicate(Root<DfpMenuModel> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+
+                //项目名称
+                List<Predicate> list = new ArrayList<Predicate>();
+                Predicate[] p = new Predicate[list.size()];
+                return criteriaBuilder.and(list.toArray(p));
+            }
+        };
+        return dfpMenuDAO.findAll(spec, pageable);
     }
 }

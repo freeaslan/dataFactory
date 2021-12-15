@@ -139,7 +139,7 @@ public class DfpSceneService {
     public DfplatformResult<String> getSceneParams(int sceneId) {
 
         //定义返回为swagger格式
-        DfplatformResult<String> defaultResult = new DfplatformResult<>();
+        DfplatformResult<String> defenderResult = new DfplatformResult<>();
 
         //事务
         operateTemplate.operateWithOutTransaction(new OperateCallBack() {
@@ -228,11 +228,11 @@ public class DfpSceneService {
                 definitions.put("swagger", "2.0");
                 definitions.put("paths", path);
                 log.info(definitions.toString());
-                defaultResult.setData(definitions.toString());
+                defenderResult.setData(definitions.toString());
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
@@ -244,7 +244,7 @@ public class DfpSceneService {
     public DfplatformResult<DfpRequestSceneVO> requestScene(DfpQuestSceneBO dfpQuestSceneBO) {
 
         //定义变量
-        DfplatformResult<DfpRequestSceneVO> defaultResult = new DfplatformResult<>();
+        DfplatformResult<DfpRequestSceneVO> defenderResult = new DfplatformResult<>();
         DfpRequestSceneVO dfpRequestSceneVO = new DfpRequestSceneVO();
 
         //事务
@@ -411,13 +411,13 @@ public class DfpSceneService {
                 //执行testng.xml
                 TestngUtil.executeTestngXml(uuid);
                 //执行结果处理
-                resultProcess(uuid, defaultResult, dfpRequestSceneVO);
+                resultProcess(uuid, defenderResult, dfpRequestSceneVO);
                 //测试报告处理
-                reportProcess(uuid, dfpSceneModel.getSceneName(), defaultResult, dfpRequestSceneVO);
+                reportProcess(uuid, dfpSceneModel.getSceneName(), defenderResult, dfpRequestSceneVO);
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
 
@@ -430,7 +430,7 @@ public class DfpSceneService {
     public DfplatformResult<DfpRequestSceneVO> debugSecne(DfpSceneBO dfpSceneBO) {
 
         //定义变量
-        DfplatformResult<DfpRequestSceneVO> defaultResult = new DfplatformResult<>();
+        DfplatformResult<DfpRequestSceneVO> defenderResult = new DfplatformResult<>();
         DfpRequestSceneVO dfpRequestSceneVO = new DfpRequestSceneVO();
 
         //事务
@@ -466,13 +466,13 @@ public class DfpSceneService {
                 //运行testng.xml
                 TestngUtil.executeTestngXml(uuid);
                 //执行结果处理
-                resultProcess(uuid, defaultResult, dfpRequestSceneVO);
+                resultProcess(uuid, defenderResult, dfpRequestSceneVO);
                 //测试报告处理
-                reportProcess(uuid, debugXmlName + "debug", defaultResult, dfpRequestSceneVO);
+                reportProcess(uuid, debugXmlName + "debug", defenderResult, dfpRequestSceneVO);
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
@@ -549,7 +549,7 @@ public class DfpSceneService {
     public DfplatformResult<Integer> addOrEditSecne(DfpSceneBO dfpSceneBO, boolean isEdit) {
 
         //定义变量
-        DfplatformResult<Integer> defaultResult = new DfplatformResult<>();
+        DfplatformResult<Integer> defenderResult = new DfplatformResult<>();
         //事务
         operateTemplate.operateWithTransaction(new OperateCallBack() {
 
@@ -651,11 +651,12 @@ public class DfpSceneService {
                     }
                 }
 
-                defaultResult.setData(dfpSceneModel.getId());
+                defenderResult.setData(dfpSceneModel.getId());
+                defenderResult.setMessage(isEdit ? "编辑动态参数成功" : "新增动态参数成功");
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
@@ -667,7 +668,7 @@ public class DfpSceneService {
     public DfplatformResult<Integer> deleteScene(int secneId) {
 
         //定义返回结果
-        DfplatformResult<Integer> defaultResult = new DfplatformResult<>();
+        DfplatformResult<Integer> defenderResult = new DfplatformResult<>();
         //事务
         operateTemplate.operateWithTransaction(new OperateCallBack() {
 
@@ -694,11 +695,12 @@ public class DfpSceneService {
                 dfpSceneParamsDAO.deleteBySceneId(secneId);
                 dfpSceneRequestDAO.deleteBySceneId(secneId);
                 dfpCustomApiDAO.deleteBySceneId(secneId);
-                defaultResult.setData(secneId);
+                defenderResult.setData(secneId);
+                defenderResult.setMessage("删除场景成功");
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
@@ -862,7 +864,7 @@ public class DfpSceneService {
     public DfplatformResult<Integer> copyScene(DfpCpSceneBO dfpCpSceneBO) {
 
         //定义返回结果
-        DfplatformResult<Integer> defaultResult = new DfplatformResult<>();
+        DfplatformResult<Integer> defenderResult = new DfplatformResult<>();
         //事务
         operateTemplate.operateWithTransaction(new OperateCallBack() {
 
@@ -926,11 +928,11 @@ public class DfpSceneService {
                 }
 
                 //设置结果信息
-                defaultResult.setData(dfpSceneModel.getId());
-                defaultResult.setMessage("复制场景成功");
+                defenderResult.setData(dfpSceneModel.getId());
+                defenderResult.setMessage("复制场景成功");
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        return defaultResult;
+        return defenderResult;
     }
 }

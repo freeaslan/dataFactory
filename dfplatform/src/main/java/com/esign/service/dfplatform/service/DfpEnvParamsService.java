@@ -99,8 +99,11 @@ public class DfpEnvParamsService {
                 //对象赋值
                 if (!isAdd) {
                     dfpEnvParamsModel.setId(dfpEnvParamsBO.getId());
+                } else {
+                    dfpEnvParamsModel.setCreatorId(dfpEnvParamsBO.getUserId());
                 }
 
+                dfpEnvParamsModel.setModifierId(dfpEnvParamsBO.getUserId());
                 dfpEnvParamsModel.setEnvId(dfpEnvParamsBO.getEnvId());
                 dfpEnvParamsModel.setProjectName(dfpEnvParamsBO.getProjectName());
                 dfpEnvParamsModel.setServiceName(dfpEnvParamsBO.getServiceName());
@@ -115,6 +118,45 @@ public class DfpEnvParamsService {
                 //新增或者更新环境变量信息
                 dfpEnvParamsModel = dfpEnvParamsDAO.save(dfpEnvParamsModel);
                 defenderResult.setData(dfpEnvParamsModel);
+                defenderResult.setMessage(isAdd ? "新增环境参数成功" : "编辑环境参数成功");
+            }
+        }, defenderResult);
+
+        return defenderResult;
+    }
+
+    /**
+     * 删除环境参数
+     *
+     * @param id
+     * @return
+     */
+    public DfplatformResult<Integer> deleteEnvParams(int id) {
+
+        //定义返回结果
+        DfplatformResult<Integer> defenderResult = new DfplatformResult<>();
+        //事务
+        operateTemplate.operateWithTransaction(new OperateCallBack() {
+            @Override
+            public void doCheck() {
+
+                DfplaformUtil.state(id > 0, "场景ID必须大于零");
+                DfpEnvParamsModel dfpEnvParamsModel = dfpEnvParamsDAO.findById(id);
+                DfplaformUtil.isNotNull(dfpEnvParamsModel, "要删除的环境参数不存在");
+            }
+
+            @Override
+            public void doPacker() {
+
+            }
+
+            @Override
+            public void doOperate() throws Exception {
+
+                //直接物理删除
+                dfpEnvParamsDAO.deleteById(id);
+                defenderResult.setData(id);
+                defenderResult.setMessage("删除环境参数成功");
             }
         }, defenderResult);
 
@@ -208,8 +250,7 @@ public class DfpEnvParamsService {
 
         //设置排序规则
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        //TODO 前端没有分页，暂时每页一百条数据
-        Pageable pageable = new PageRequest(dfpQueryEnvParamsBO.getPageIndex(), 100, sort);
+        Pageable pageable = new PageRequest(dfpQueryEnvParamsBO.getPageIndex(), dfpQueryEnvParamsBO.getPageSize(), sort);
         Specification<DfpEnvParamsModel> spec = new Specification<DfpEnvParamsModel>() {
 
             @Nullable

@@ -8,8 +8,10 @@ import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.base.OperateCallBack;
 import com.esign.service.dfplatform.base.OperateTemplate;
 import com.esign.service.dfplatform.daointerface.DfpPublicParamDAO;
+import com.esign.service.dfplatform.daointerface.DfpSceneParamsDAO;
 import com.esign.service.dfplatform.daointerface.DfpUserDAO;
 import com.esign.service.dfplatform.model.DfpPublicParamModel;
+import com.esign.service.dfplatform.model.DfpSceneParamsModel;
 import com.esign.service.dfplatform.model.DfpUserModel;
 import com.esign.service.dfplatform.util.DfplaformUtil;
 import com.esign.service.dfplatform.util.ObjectConverterUtil;
@@ -32,7 +34,7 @@ import java.util.List;
 
 /**
  * @Author: huangtai
- * @Description: 公共参数服务
+ * @Description: 动态参数服务
  * @Date: 2021/6/8 9:19
  */
 @Service
@@ -47,8 +49,11 @@ public class DfpPublicParamService {
     @Autowired
     DfpUserDAO dfpUserDAO;
 
+    @Autowired
+    DfpSceneParamsDAO dfpSceneParamsDAO;
+
     /**
-     * 新增和编辑公共参数
+     * 新增和编辑动态参数
      *
      * @param dfpPublicParamBO
      * @param isAdd
@@ -57,7 +62,7 @@ public class DfpPublicParamService {
     public DfplatformResult<DfpPublicParamModel> addOrEditPublicParam(DfpPublicParamBO dfpPublicParamBO, boolean isAdd) {
 
         //定义返回结果
-        DfplatformResult<DfpPublicParamModel> defaultResult = new DfplatformResult<>();
+        DfplatformResult<DfpPublicParamModel> defenderResult = new DfplatformResult<>();
 
         //事务
         operateTemplate.operateWithTransaction(new OperateCallBack() {
@@ -72,9 +77,9 @@ public class DfpPublicParamService {
                 DfplaformUtil.isNotNull(dfpUserModel, "用户不存在");
                 if (!isAdd) {
 
-                    DfplaformUtil.state(dfpPublicParamBO.getId() > 0, "公共参数ID必须大于0");
+                    DfplaformUtil.state(dfpPublicParamBO.getId() > 0, "动态参数ID必须大于0");
                     dfpPublicParamModel = dfpPublicParamDAO.findById(dfpPublicParamBO.getId());
-                    DfplaformUtil.isNotNull(dfpPublicParamModel, "编辑的公共参数不存在");
+                    DfplaformUtil.isNotNull(dfpPublicParamModel, "编辑的动态参数不存在");
                 }
             }
 
@@ -88,7 +93,7 @@ public class DfpPublicParamService {
                 //相同key的公共参数只能存在一个
                 DfpPublicParamModel checkPublicParamModel = dfpPublicParamDAO.findByParamKey(dfpPublicParamBO.getParamKey());
                 if (isAdd || (checkPublicParamModel != null && dfpPublicParamBO.getId() != checkPublicParamModel.getId())) {
-                    DfplaformUtil.isNull(checkPublicParamModel, "公共参数已经存在");
+                    DfplaformUtil.isNull(checkPublicParamModel, "动态参数已经存在");
                 }
 
                 ObjectConverterUtil.convert(dfpPublicParamBO, dfpPublicParamModel);
@@ -106,16 +111,16 @@ public class DfpPublicParamService {
                 }
                 dfpPublicParamModel.setJarName(jarName);
                 dfpPublicParamModel = dfpPublicParamDAO.save(dfpPublicParamModel);
-                defaultResult.setData(dfpPublicParamModel);
+                defenderResult.setData(dfpPublicParamModel);
+                defenderResult.setMessage(isAdd ? "新增动态参数成功" : "编辑动态参数成功");
             }
-        }, defaultResult);
+        }, defenderResult);
 
-        defaultResult.setMessage("新增/编辑公共参数成功");
-        return defaultResult;
+        return defenderResult;
     }
 
     /**
-     * 获取公共参数信息
+     * 获取动态参数信息
      *
      * @param dfpQueryPublicParamBO
      * @return
@@ -171,7 +176,49 @@ public class DfpPublicParamService {
     }
 
     /**
-     * 分页查询公共参数信息
+     * 删除动态参数
+     *
+     * @param id
+     * @return
+     */
+    public DfplatformResult<Integer> deleteDynamicParam(int id) {
+
+        //定义返回结果
+        DfplatformResult<Integer> defenderResult = new DfplatformResult<>();
+
+        //开启事务
+        operateTemplate.operateWithTransaction(new OperateCallBack() {
+            @Override
+            public void doCheck() {
+
+                DfplaformUtil.state(id > 0, "动态参数ID必须大于0");
+                DfpPublicParamModel dfpPublicParamModel = dfpPublicParamDAO.findById(id);
+                DfplaformUtil.isNotNull(dfpPublicParamModel, "要删除的参数不存在");
+
+                List<DfpSceneParamsModel> dfpSceneParamsModels = dfpSceneParamsDAO.findByParamKeyAndParamType(dfpPublicParamModel.getParamKey(),
+                        "public");
+                DfplaformUtil.isBlank(dfpSceneParamsModels, "有场景在使用该参数不能删除");
+            }
+
+            @Override
+            public void doPacker() {
+
+            }
+
+            @Override
+            public void doOperate() throws Exception {
+
+                dfpPublicParamDAO.deleteById(id);
+                defenderResult.setData(id);
+                defenderResult.setMessage("删除动态参数成功");
+            }
+        }, defenderResult);
+
+        return defenderResult;
+    }
+
+    /**
+     * 分页查询动态参数信息
      *
      * @param dfpQueryPublicParamBO
      * @return
@@ -180,8 +227,7 @@ public class DfpPublicParamService {
 
         //设置排序规则
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        //TODO 前端没有分页，暂时每页一百条数据
-        Pageable pageable = new PageRequest(dfpQueryPublicParamBO.getPageIndex(), 100, sort);
+        Pageable pageable = new PageRequest(dfpQueryPublicParamBO.getPageIndex(), dfpQueryPublicParamBO.getPageSize(), sort);
         Specification<DfpPublicParamModel> spec = new Specification<DfpPublicParamModel>() {
 
             @Nullable

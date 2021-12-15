@@ -173,8 +173,7 @@ public class DfpUserService {
 
         //设置排序规则
         Sort sort = new Sort(Sort.Direction.DESC, "id");
-        //TODO 前端没有分页，暂时每页一百条数据
-        Pageable pageable = new PageRequest(dfpUserListBO.getPageIndex(), 100, sort);
+        Pageable pageable = new PageRequest(dfpUserListBO.getPageIndex(), dfpUserListBO.getPageSize(), sort);
         Specification<DfpUserModel> spec = new Specification<DfpUserModel>() {
 
             @Nullable

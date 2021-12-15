@@ -58,11 +58,11 @@ public class DfpModuleService {
                 checkModuleName(dfpModuleBO);
             }
 
-
             @Override
             public void doPacker() {
 
                 ObjectConverterUtil.convert(dfpModuleBO, dfpModuleModel);
+                dfpModuleModel.setCreatorId(dfpModuleBO.getUserId());
             }
 
             @Override
@@ -72,6 +72,7 @@ public class DfpModuleService {
                 dfpModuleModel = dfpModuleDAO.save(dfpModuleModel);
                 ObjectConverterUtil.convert(dfpModuleModel, dfpModuleVO);
                 defenderResult.setData(dfpModuleVO);
+                defenderResult.setMessage("新增模块成功");
             }
         }, defenderResult);
 

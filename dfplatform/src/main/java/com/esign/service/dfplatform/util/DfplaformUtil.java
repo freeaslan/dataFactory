@@ -75,6 +75,19 @@ public class DfplaformUtil {
     }
 
     /**
+     * 容器为空，否则抛出message异常
+     *
+     * @param collection
+     * @param message
+     */
+    public static void isBlank(Collection collection, String message) {
+
+        if (!CollectionUtils.isEmpty(collection)) {
+            throw new BaseCheckException(message);
+        }
+    }
+
+    /**
      * 表示成功，否则抛出message异常
      *
      * @param expression
@@ -159,5 +172,22 @@ public class DfplaformUtil {
             e.printStackTrace();
         }
         return "http://" + ip + ":";
+    }
+
+    /**
+     * 获取当前操作系统
+     *
+     * @return
+     */
+    public static boolean isWindowsSystem() {
+
+        Properties props = System.getProperties(); //获得系统属性集
+        String osName = props.getProperty("os.name"); //操作系统名称
+        if (osName.contains("Windows")) {
+
+            return true;
+        }
+
+        return false;
     }
 }

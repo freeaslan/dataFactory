@@ -14,4 +14,6 @@ public interface DfpEnvParamsDAO extends JpaRepository<DfpEnvParamsModel, Long>,
     DfpEnvParamsModel findByEnvIdAndProjectNameAndServiceName(int envId, String projectName, String serviceName);
 
     DfpEnvParamsModel findById(int id);
+
+    void deleteById(int id);
 }

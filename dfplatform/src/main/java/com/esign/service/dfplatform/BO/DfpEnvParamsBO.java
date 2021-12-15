@@ -29,4 +29,6 @@ public class DfpEnvParamsBO {
     String serviceName;
 
     Map<String, String> header;
+
+    int userId;
 }

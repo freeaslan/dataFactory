@@ -135,13 +135,10 @@ export default {
   },
   methods: {
     init: function (id, type) {
-      console.log('menuaddorupdate94:' + id)
-      console.log('menuaddorupdate95:' + type)
       var menuUrl = this.dfp_url + '/dfplatform/getMenuTree'
       this.$axios.get(menuUrl).then(res => {
         var datas = res.data.data
         this.menuList = datas.menuList
-        console.log('menuaddorupdate99:' + JSON.stringify(this.menuList))
       })
       var url = this.dfp_url + '/dfplatform/getMenuById'
       this.visible = true
@@ -151,7 +148,6 @@ export default {
       if (type === 'update') {
         this.$axios.get(url, { params: { id: id } }).then(res => {
           var datas = res.data.data
-          console.log('menuaddorupdate104datas:' + JSON.stringify(datas))
           this.dataForm.id = datas.id
           this.dataForm.type = datas.type
           this.dataForm.name = datas.name
@@ -166,7 +162,6 @@ export default {
         })
       } else {
         this.dataForm.id = 0
-        console.log('menuaddorupdate115:')
       }
     },
     // 菜单树选中
@@ -184,7 +179,6 @@ export default {
     dataFormSubmit () {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          console.log('this.dataForm:' + this.dataForm)
           var addMenu = this.dfp_url + '/dfplatform/addMenu'
           var updateMenu = this.dfp_url + '/dfplatform/updateMenu'
           var url
@@ -207,14 +201,14 @@ export default {
           var menuparentId = this.dataForm.parentId
           var menutype = this.dataForm.type
           var menuicon = this.dataForm.icon
-          console.log('bbbbbb:' + menuparentId)
           var json = {
             id: menuid,
             type: menutype,
             name: menuname,
             parentId: menuparentId,
             parentName: menuparentname,
-            icon: menuicon
+            icon: menuicon,
+            userId: window.localStorage.getItem('userId')
           }
           this.$axios
             .post(url, json, {})
