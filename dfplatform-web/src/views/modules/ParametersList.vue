@@ -308,6 +308,7 @@
         ref="Pagination"
         layout="prev, pager, next"
         :total="total"
+        :page-size="20"
       ></el-pagination>
     </div>
   </div>

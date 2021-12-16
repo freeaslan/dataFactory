@@ -239,6 +239,7 @@
         ref="Pagination"
         layout="prev, pager, next"
         :total="total"
+        :page-size="20"
       ></el-pagination>
     </div>
   </div>
@@ -289,6 +290,7 @@ export default {
       ServiceData: [],
       table: true,
       cur_page: 1,
+      total: 0,
       multipleSelection: [],
       select_word: '',
       del_list: [],
@@ -553,10 +555,9 @@ export default {
     // 搜索
     search (val) {
       let _this = this
+      var pageNum = 0
       if (val === this.cur_page) {
-        var pageNum = val - 1
-      } else {
-        var pageNum = 0
+        pageNum = val - 1
       }
       var parentName = sessionStorage.getItem('projectName')
       var projectName = this.searchform.projectName
@@ -579,7 +580,7 @@ export default {
         .then(res => {
           var data = res.data.data
           var count = data.totalNum
-          this.count = parseInt(count)
+          this.total = parseInt(count)
           var list = []
           var model = data.dfpEnvParamsModelList
           for (var i = 0; i < model.length; i++) {
