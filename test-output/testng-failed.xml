@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite thread-count="1" name="Failed suite [automation]">
+  <parameter name="sceneName" value="classdemodebug"/>
+  <parameter name="taskId" value="84df992f-f698-11eb-b14a-695983097677debug"/>
+  <listeners>
+    <listener class-name="com.esign.service.dfplatform.base.ExtentTestNGListener"/>
+  </listeners>
+  <test name="test(failed)">
+    <classes>
+      <class name="com.esign.service.dfplatform.scenetest.SceneDebug">
+        <methods>
+          <include name="testSceneTest" invocation-numbers="0"/>
+        </methods>
+      </class> <!-- com.esign.service.dfplatform.scenetest.SceneDebug -->
+    </classes>
+  </test> <!-- test(failed) -->
+</suite> <!-- Failed suite [automation] -->

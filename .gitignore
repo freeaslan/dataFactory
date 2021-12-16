@@ -1,0 +1,24 @@
+*target
+target/
+*.idea
+*.settings
+*.iml
+*.classpath
+*.project
+*.mymetadata
+*.zip
+*.7z
+*.metadata/
+*.recommenders/
+bin/
+#Intelij IDEA
+*.iml
+*.MF
+*.class
+bin
+logs
+allure-results/
+arthas-output/
+test-output/
+report/
+src/main/uploadfile/
