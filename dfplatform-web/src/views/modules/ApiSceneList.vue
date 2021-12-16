@@ -569,7 +569,7 @@ export default {
           sceneName: '',
           moduleId: '',
           pageIndex: pageNum,
-          pageSize: 0,
+          pageSize: 20,
           projectName: this.Swaggerform.project
         })
         .then(res => {

@@ -51,47 +51,6 @@
               >
                 修改密码
               </el-button>
-              <el-dialog
-                title="更新模块"
-                :visible.sync="dialogModelVisible"
-                size="tiny"
-                width="30%"
-              >
-                <el-form :model="userform" label-width="100px">
-                  <el-form-item label="用户名" v-model="userform.username">
-                    <el-input size="mini" v-model="userform.username" disabled>
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="旧密码">
-                    <el-input
-                      size="mini"
-                      v-model="userform.password"
-                      placeholder="请输入旧密码"
-                    >
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="新密码">
-                    <el-input
-                      size="mini"
-                      v-model="userform.newPassword"
-                      placeholder="请输入新密码"
-                    >
-                    </el-input>
-                  </el-form-item>
-                  <el-form-item label="再次输入新密码">
-                    <el-input
-                      size="mini"
-                      v-model="userform.newPasswordAgain"
-                      placeholder="再次输入新密码"
-                    >
-                    </el-input>
-                  </el-form-item>
-                </el-form>
-                <div slot="footer" class="dialog-footer">
-                  <el-button @click="dialogModelVisible = false">取 消</el-button>
-                  <el-button type="primary" @click="createmodel">确 定</el-button>
-                </div>
-              </el-dialog>
               <el-dropdown-item @click.native="logoutHandle()">
                 退出
               </el-dropdown-item>
@@ -99,6 +58,43 @@
           </el-dropdown>
         </el-menu-item>
       </el-menu>
+     <el-dialog append-to-body
+       title="更新密码"
+       :visible.sync="dialogModelVisible"
+       size="tiny"
+       width="30%"
+     >
+       <el-form :model="userform" label-width="110px">
+         <el-form-item label="旧密码">
+           <el-input
+             size="mini"
+             v-model="userform.password"
+             placeholder="请输入旧密码"
+           >
+           </el-input>
+         </el-form-item>
+         <el-form-item label="新密码">
+           <el-input
+             size="mini"
+             v-model="userform.newPassword"
+             placeholder="请输入新密码"
+           >
+           </el-input>
+         </el-form-item>
+         <el-form-item label="再次输入新密码">
+           <el-input
+             size="mini"
+             v-model="userform.newPasswordAgain"
+             placeholder="再次输入新密码"
+           >
+           </el-input>
+         </el-form-item>
+       </el-form>
+       <div slot="footer" class="dialog-footer">
+         <el-button @click="dialogModelVisible = false">取 消</el-button>
+         <el-button type="primary" @click="createmodel">确 定</el-button>
+       </div>
+     </el-dialog>
     </div>
   </nav>
 </template>
@@ -114,7 +110,8 @@ export default {
         newPasswordAgain: ''
       },
       updatePassowrdVisible: false,
-      dialogModelVisible: false
+      dialogModelVisible: false,
+      dfp_url: window.SITE_CONFIG.baseUrl,
     }
   },
   created () {
@@ -146,9 +143,9 @@ export default {
       this.$axios
         .post(url, {
           isupdate: true,
-          newPassword: this.userform.newPassword,
-          newPasswordAgain: this.userform.newPasswordAgain,
-          password: this.userform.password,
+          newPassword: this.$md5(this.userform.newPassword),
+          newPasswordAgain: this.$md5(this.userform.newPasswordAgain),
+          password: this.$md5(this.userform.password),
           username: this.$store.state.user.name
         })
         .then(res => {

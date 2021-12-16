@@ -94,7 +94,7 @@ export default {
     getUserInfo () {
       var url = this.dfp_url + '/dfplatform/getUser'
       this.userName = window.localStorage.getItem('user')
-      this.$axios.get(url, params: {username: this.userName}).then(res => {
+      this.$axios.get(url, {params: {username: this.userName}}).then(res => {
         var datas = res.data
         if (datas && datas.code === 0) {
           this.loading = false
