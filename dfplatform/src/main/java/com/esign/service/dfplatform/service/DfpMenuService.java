@@ -99,7 +99,8 @@ public class DfpMenuService {
                         DfplaformUtil.isNull(checkMenuModel, "添加的菜单名称已经存在");
                     }
                 } else {
-                    DfplaformUtil.isNull(dfpMenuDAO.findByParentId(dfpMenuBO.getParentId()), "该项目已经存在环境设置");
+                    List<DfpMenuModel> dfpMenuModels = dfpMenuDAO.findByParentIdAndType(dfpMenuBO.getParentId(), 2);
+                    DfplaformUtil.isBlank(dfpMenuModels, "该项目已经存在环境设置");
                 }
                 ObjectConverterUtil.convert(dfpMenuBO, dfpMenuModel);
                 if (dfpMenuBO.getType() == 0) {

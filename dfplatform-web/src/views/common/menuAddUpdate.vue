@@ -114,12 +114,6 @@ export default {
         iconList: []
       },
       dataRule: {
-        name: [
-          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
-        ],
-        parentName: [
-          { required: true, message: '上级菜单不能为空', trigger: 'change' }
-        ],
         icon: [{ required: true, message: '图标不能为空', trigger: 'change' }]
       },
       menuList: [],
@@ -223,7 +217,7 @@ export default {
                 this.$emit('refreshDataList')
               } else {
                 this.$message({
-                  message: 'datas.message',
+                  message: datas.message,
                   type: 'fail'
                 })
               }

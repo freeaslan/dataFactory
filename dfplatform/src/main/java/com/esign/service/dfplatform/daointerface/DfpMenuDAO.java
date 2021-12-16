@@ -22,6 +22,8 @@ public interface DfpMenuDAO extends JpaRepository<DfpMenuModel, Long>, JpaSpecif
 
     DfpMenuModel findById(int id);
 
+    List<DfpMenuModel> findByParentIdAndType(int parentId, int type);
+
     @Query(value = "SELECT name FROM dfp_menu WHERE parent_id=? and type =1", nativeQuery = true)
     List<String> findNameByParentId(int parentId);
 }

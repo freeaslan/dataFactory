@@ -47,7 +47,7 @@ public class DfpEnvParamsController {
 
     @OperateLogger(operate = "删除环境参数")
     @ApiOperation(value = "删除环境参数")
-    @RequestMapping(value = "/deleteEnvParams", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteEnvParams", method = RequestMethod.GET)
     public DfplatformResult<Integer> deleteEnvParams(@RequestParam int userId, @RequestParam int id) {
 
         DfplatformResult<Integer> result = dfpCommonParamsService.deleteEnvParams(id);

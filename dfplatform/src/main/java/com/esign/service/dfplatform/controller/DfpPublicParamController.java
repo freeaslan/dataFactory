@@ -52,7 +52,7 @@ public class DfpPublicParamController {
 
     @OperateLogger(operate = "删除动态参数")
     @ApiOperation(value = "删除动态参数")
-    @RequestMapping(value = "/deleteDynamicParam", method = RequestMethod.POST)
+    @RequestMapping(value = "/deleteDynamicParam", method = RequestMethod.GET)
     public DfplatformResult<Integer> deleteDynamicParam(@RequestParam int userId, @RequestParam int id) {
 
         DfplatformResult<Integer> result = dfpPublicParamService.deleteDynamicParam(id);

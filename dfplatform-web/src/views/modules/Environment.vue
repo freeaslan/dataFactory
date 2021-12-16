@@ -104,9 +104,12 @@
             type="primary"
             size="small"
             @click="update(scope.$index, scope.row)"
-          >
-            修改
-          </el-button>
+          >修改</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="deleteHandle(scope.row.id)"
+            >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -300,7 +303,6 @@ export default {
       count: '',
       provinceVal: '',
       provinceVal2: '',
-      // eslint-disable-next-line no-dupe-keys
       form: {
         service: '',
         branch: ''
@@ -336,16 +338,13 @@ export default {
   computed: {
     data () {
       return this.tableData.filter(d => {
-        // eslint-disable-next-line camelcase
         let is_del = false
         for (let i = 0; i < this.del_list.length; i++) {
           if (d.name === this.del_list[i].name) {
-            // eslint-disable-next-line camelcase
             is_del = true
             break
           }
         }
-        // eslint-disable-next-line camelcase
         if (!is_del) {
           if (
             d.address.indexOf(this.select_cate) > -1 &&
@@ -442,6 +441,38 @@ export default {
     add () {
       this.addVisible = true
     },
+    // 删除
+    deleteHandle (id) {
+      this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          var url = this.dfp_url + '/dfplatform/deleteEnvParams'
+          this.$axios
+            .get(url, {
+              params: {
+                id: id,
+                userId: this.operator
+              }
+            })
+            .then(res => {
+              var datas = res.data
+              if (datas && datas.code === 0) {
+                this.$message({
+                  message: '环境配置删除成功',
+                  type: 'success'
+                })
+                var val = 0
+                this.search(val)
+              } else {
+                this.$message.error(datas.msg)
+              }
+            })
+        })
+        .catch(() => {})
+    }
     // 提交环境配置
     sub_add () {
       let _this = this
@@ -450,11 +481,8 @@ export default {
       var envId = this.addform.envId
       var host = this.addform.host
       var header = this.addform.header
-      // eslint-disable-next-line no-unused-vars
       var creator = this.operator
-
       var url = this.dfp_url + '/dfplatform/addCommonParams'
-      // eslint-disable-next-line eqeqeq
       if (serviceName == '' || host == '' || header == '') {
         _this.$message.error('无法提交，服务名和请求域名和请求头部不能为空！')
       } else {
@@ -489,7 +517,6 @@ export default {
             var val = 0
             this.search(val)
           })
-          // eslint-disable-next-line handle-callback-err
           .catch(err => {
             console.log(err)
           })
@@ -541,7 +568,6 @@ export default {
           var val = 0
           this.search(val)
         })
-        // eslint-disable-next-line handle-callback-err
         .catch(err => {
           console.log(err)
         })
@@ -596,10 +622,8 @@ export default {
             list.push(map)
           }
           this.tableData = list
-          // eslint-disable-next-line no-redeclare
           var datas = res.data
           if (datas.code === 0) {
-            // _this.$message.success(datas.message);
           } else {
             _this.$message.error(datas.message)
           }
@@ -622,7 +646,6 @@ export default {
           case_id: item.case_id
         }
       })
-      // location.reload()
       this.idx = index
     },
     handleSelectionChange (val) {

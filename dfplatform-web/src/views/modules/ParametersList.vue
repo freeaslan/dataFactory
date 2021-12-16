@@ -116,8 +116,12 @@
             type="primary"
             size="small"
             @click="update(scope.$index, scope.row)"
-            >修改</el-button
-          >
+            >修改</el-button>
+          <el-button
+            type="text"
+            size="small"
+            @click="deleteHandle(scope.row.id)"
+            >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -476,7 +480,6 @@ export default {
           var val = 0
           this.search(val)
         })
-        // eslint-disable-next-line handle-callback-err
         .catch(err => {
           this.$message.error(err.response.data.message)
         })
@@ -543,6 +546,38 @@ export default {
           console.log(error)
         })
     },
+    // 删除
+    deleteHandle (id) {
+      this.$confirm(`确定对[id=${id}]进行[删除]操作?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(() => {
+          var url = this.dfp_url + '/dfplatform/deleteDynamicParam'
+          this.$axios
+            .get(url, {
+              params: {
+                id: id,
+                userId: this.userId
+              }
+            })
+            .then(res => {
+              var datas = res.data
+              if (datas && datas.code === 0) {
+                this.$message({
+                  message: '动态参数删除成功',
+                  type: 'success'
+                })
+                var val = 0
+                this.search(val)
+              } else {
+                this.$message.error(datas.msg)
+              }
+            })
+        })
+        .catch(() => {})
+    }
     getData (val) {
       var pageNum = 0
       if (val === this.cur_page) {
