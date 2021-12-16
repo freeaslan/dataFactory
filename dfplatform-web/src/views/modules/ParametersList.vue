@@ -577,7 +577,7 @@ export default {
             })
         })
         .catch(() => {})
-    }
+    },
     getData (val) {
       var pageNum = 0
       if (val === this.cur_page) {

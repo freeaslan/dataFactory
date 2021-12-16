@@ -302,11 +302,7 @@ export default {
       delVisible: false,
       count: '',
       provinceVal: '',
-      provinceVal2: '',
-      form: {
-        service: '',
-        branch: ''
-      }
+      provinceVal2: ''
     }
   },
   created () {
@@ -338,14 +334,14 @@ export default {
   computed: {
     data () {
       return this.tableData.filter(d => {
-        let is_del = false
+        let isDel = false
         for (let i = 0; i < this.del_list.length; i++) {
           if (d.name === this.del_list[i].name) {
-            is_del = true
+            isDel = true
             break
           }
         }
-        if (!is_del) {
+        if (!isDel) {
           if (
             d.address.indexOf(this.select_cate) > -1 &&
             (d.name.indexOf(this.select_word) > -1 ||
@@ -472,7 +468,7 @@ export default {
             })
         })
         .catch(() => {})
-    }
+    },
     // 提交环境配置
     sub_add () {
       let _this = this
@@ -481,9 +477,8 @@ export default {
       var envId = this.addform.envId
       var host = this.addform.host
       var header = this.addform.header
-      var creator = this.operator
       var url = this.dfp_url + '/dfplatform/addCommonParams'
-      if (serviceName == '' || host == '' || header == '') {
+      if (serviceName === '' || host === '' || header === '') {
         _this.$message.error('无法提交，服务名和请求域名和请求头部不能为空！')
       } else {
         this.fullscreenLoading = true
