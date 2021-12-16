@@ -101,14 +101,14 @@
       <el-table-column prop label="操作" min-width="80" align="center">
         <template slot-scope="scope">
           <el-button
-            type="primary"
+            type="text"
             size="small"
             @click="update(scope.$index, scope.row)"
           >修改</el-button>
           <el-button
             type="text"
             size="small"
-            @click="deleteHandle(scope.row.id)"
+            @click="deleteHandle(scope.row.listId)"
             >删除</el-button>
         </template>
       </el-table-column>
@@ -450,7 +450,7 @@ export default {
             .get(url, {
               params: {
                 id: id,
-                userId: this.operator
+                userId: window.localStorage.getItem('userId')
               }
             })
             .then(res => {

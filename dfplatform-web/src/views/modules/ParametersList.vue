@@ -113,7 +113,7 @@
       <el-table-column prop label="操作" min-width="80" align="center">
         <template slot-scope="scope">
           <el-button
-            type="primary"
+            type="text"
             size="small"
             @click="update(scope.$index, scope.row)"
             >修改</el-button>
