@@ -97,7 +97,7 @@ export default {
       dataListLoading: false,
       addOrUpdateVisible: false,
       dfp_url: window.SITE_CONFIG.baseUrl,
-      total: 0,
+      total: 0
     }
   },
   components: {
@@ -114,10 +114,9 @@ export default {
     },
     // 获取数据列表
     getDataList (val) {
+      var pageNum = 0
       if (val === this.cur_page) {
-        var pageNum = val - 1
-      } else {
-        var pageNum = 0
+        pageNum = val - 1
       }
       var url = this.dfp_url + '/dfplatform/getAllMenuList'
       this.dataListLoading = true
@@ -184,7 +183,7 @@ export default {
                 this.$message.error(datas.msg)
               }
             })
-          })
+        })
         .catch(() => {})
     }
   }

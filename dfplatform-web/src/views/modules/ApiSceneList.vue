@@ -558,10 +558,9 @@ export default {
       this.search(val)
     },
     getData (val) {
+      var pageNum = 0
       if (val === this.cur_page) {
-        var pageNum = val - 1
-      } else {
-        var pageNum = 0
+        pageNum = val - 1
       }
       var url = this.dfp_url + '/dfplatform/getSceneList'
       this.$axios
@@ -598,17 +597,16 @@ export default {
     },
     search (val) {
       let _this = this
+      var pageNum = 0
       if (val === this.cur_page) {
-        var pageNum = val - 1
+        pageNum = val - 1
       } else {
-        var pageNum = 0
         this.$refs.Pagination.internalCurrentPage = 1
       }
       var url = this.dfp_url + '/dfplatform/getSceneList'
+      var serachModuleId = _this.moduleId
       if (_this.moduleId === -1) {
-        var serachModuleId = ''
-      } else {
-        var serachModuleId = _this.moduleId
+        serachModuleId = ''
       }
       this.$axios
         .post(url, {

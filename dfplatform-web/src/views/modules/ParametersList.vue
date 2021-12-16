@@ -502,11 +502,9 @@ export default {
     },
     // 搜索
     search (val) {
+      var pageNum = 0
       if (val === this.cur_page) {
-        var pageNum = val - 1
-      } else {
-        var pageNum = 0
-        this.$refs.Pagination.internalCurrentPage = 1
+        pageNum = val - 1
       }
       var url = this.dfp_url + '/dfplatform/queryPublicParamByPage'
       this.$axios
@@ -545,10 +543,9 @@ export default {
         })
     },
     getData (val) {
+      var pageNum = 0
       if (val === this.cur_page) {
-        var pageNum = val - 1
-      } else {
-        var pageNum = 0
+        pageNum = val - 1
       }
       var url = this.dfp_url + '/dfplatform/queryPublicParamByPage'
       this.$axios
