@@ -97,7 +97,7 @@ export default {
       dataListLoading: false,
       addOrUpdateVisible: false,
       dfp_url: window.SITE_CONFIG.baseUrl,
-      total: 0
+      total: 0,
     }
   },
   components: {
@@ -114,7 +114,6 @@ export default {
     },
     // 获取数据列表
     getDataList (val) {
-      let _this = this
       if (val === this.cur_page) {
         var pageNum = val - 1
       } else {
@@ -186,7 +185,7 @@ export default {
               }
             })
           })
-          .catch(() => {})
+        .catch(() => {})
     }
   }
 }

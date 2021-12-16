@@ -558,7 +558,6 @@ export default {
       this.search(val)
     },
     getData (val) {
-      let _this = this
       if (val === this.cur_page) {
         var pageNum = val - 1
       } else {
@@ -606,15 +605,15 @@ export default {
         this.$refs.Pagination.internalCurrentPage = 1
       }
       var url = this.dfp_url + '/dfplatform/getSceneList'
-      if (_this.moduleId == -1) {
-        var serach_moduleId = ''
+      if (_this.moduleId === -1) {
+        var serachModuleId = ''
       } else {
-        var serach_moduleId = _this.moduleId
+        var serachModuleId = _this.moduleId
       }
       this.$axios
         .post(url, {
           sceneName: _this.form.scenario,
-          moduleId: serach_moduleId,
+          moduleId: serachModuleId,
           pageIndex: pageNum,
           pageSize: 20,
           projectName: this.Swaggerform.project

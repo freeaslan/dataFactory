@@ -359,20 +359,20 @@ export default {
     }
   },
   created () {
-   var val = 0
-   this.getData()
+    var val = 0
+    this.getData(val)
   },
   computed: {
     data () {
       return this.tableData.filter(d => {
-        let is_del = false
+        let isDel = false
         for (let i = 0; i < this.del_list.length; i++) {
           if (d.name === this.del_list[i].name) {
-            is_del = true
+            isDel = true
             break
           }
         }
-        if (!is_del) {
+        if (!isDel) {
           if (
             d.address.indexOf(this.select_cate) > -1 &&
             (d.name.indexOf(this.select_word) > -1 ||
@@ -502,7 +502,6 @@ export default {
     },
     // 搜索
     search (val) {
-      let _this = this
       if (val === this.cur_page) {
         var pageNum = val - 1
       } else {
@@ -546,7 +545,6 @@ export default {
         })
     },
     getData (val) {
-      let _this = this
       if (val === this.cur_page) {
         var pageNum = val - 1
       } else {
