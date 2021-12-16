@@ -92,15 +92,13 @@ export default {
     },
     // 获取当前用户信息
     getUserInfo () {
-      var url = this.dfp_url + '/dfplatform/getUserList'
+      var url = this.dfp_url + '/dfplatform/getUser'
       this.userName = window.localStorage.getItem('user')
-      var json = { username: this.userName, pageIndex: 0, pageSize: 10 }
-      this.$axios.post(url, json, {}).then(res => {
+      this.$axios.get(url, params: {username: this.userName}).then(res => {
         var datas = res.data
         if (datas && datas.code === 0) {
-          var List = datas.data.userList
           this.loading = false
-          window.localStorage.setItem('userId', List[0].id)
+          window.localStorage.setItem('userId', datas.data.id)
         }
       })
     }

@@ -569,7 +569,7 @@ export default {
           sceneName: '',
           moduleId: '',
           pageIndex: pageNum,
-          pageSize: 20,
+          pageSize: 0,
           projectName: this.Swaggerform.project
         })
         .then(res => {
@@ -614,7 +614,7 @@ export default {
           sceneName: _this.form.scenario,
           moduleId: serachModuleId,
           pageIndex: pageNum,
-          pageSize: 20,
+          pageSize: 10,
           projectName: this.Swaggerform.project
         })
         .then(res => {

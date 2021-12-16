@@ -69,7 +69,7 @@
       <el-table-column
         prop="listProjectName"
         label="项目"
-        width="266"
+        width="250"
         align="center"
       >
       </el-table-column>
@@ -98,7 +98,7 @@
         align="center"
         :show-overflow-tooltip="true"
       ></el-table-column>
-      <el-table-column prop label="操作" min-width="80" align="center">
+      <el-table-column prop label="操作" min-width="160" align="center">
         <template slot-scope="scope">
           <el-button
             type="text"

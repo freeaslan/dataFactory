@@ -1,8 +1,7 @@
 package com.esign.service.dfplatform.controller;
 
+import com.esign.service.dfplatform.BO.DfpUpdatePwdBO;
 import com.esign.service.dfplatform.BO.DfpUserBO;
-import com.esign.service.dfplatform.BO.DfpUserListBO;
-import com.esign.service.dfplatform.VO.DfpUserListVO;
 import com.esign.service.dfplatform.aop.OperateLogger;
 import com.esign.service.dfplatform.base.DfplatformResult;
 import com.esign.service.dfplatform.model.DfpUserModel;
@@ -10,10 +9,7 @@ import com.esign.service.dfplatform.service.DfpUserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Author: yunge
@@ -46,10 +42,18 @@ public class DfpUserController {
     }
 
     @ApiOperation(value = "获取用户信息")
-    @RequestMapping(value = "/getUserList", method = RequestMethod.POST)
-    public DfplatformResult<DfpUserListVO> getUserList(@RequestBody @Validated DfpUserListBO dfpUserListBO) {
+    @RequestMapping(value = "/getUser", method = RequestMethod.GET)
+    public DfplatformResult<DfpUserModel> getUser(@RequestParam String username) {
 
-        DfplatformResult result = dfpUserService.getUserList(dfpUserListBO);
+        DfplatformResult result = dfpUserService.getUser(username);
+        return result;
+    }
+
+    @ApiOperation(value = "修改密码信息")
+    @RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+    public DfplatformResult<Integer> updatePassword(@RequestBody @Validated DfpUpdatePwdBO dfpUpdatePwdBO) {
+
+        DfplatformResult result = dfpUserService.updatePassword(dfpUpdatePwdBO);
         return result;
     }
 }

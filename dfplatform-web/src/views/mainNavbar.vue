@@ -44,6 +44,54 @@
               }}
             </span>
             <el-dropdown-menu slot="dropdown">
+              <el-button
+                style="float: right; margin-right: 10px"
+                type="text"
+                @click=";(dialogModelVisible = true), (userform.username = '')"
+              >
+                修改密码
+              </el-button>
+              <el-dialog
+                title="更新模块"
+                :visible.sync="dialogModelVisible"
+                size="tiny"
+                width="30%"
+              >
+                <el-form :model="userform" label-width="100px">
+                  <el-form-item label="用户名" v-model="userform.username">
+                    <el-input size="mini" v-model="userform.username" disabled>
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="旧密码">
+                    <el-input
+                      size="mini"
+                      v-model="userform.password"
+                      placeholder="请输入旧密码"
+                    >
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="新密码">
+                    <el-input
+                      size="mini"
+                      v-model="userform.newPassword"
+                      placeholder="请输入新密码"
+                    >
+                    </el-input>
+                  </el-form-item>
+                  <el-form-item label="再次输入新密码">
+                    <el-input
+                      size="mini"
+                      v-model="userform.newPasswordAgain"
+                      placeholder="再次输入新密码"
+                    >
+                    </el-input>
+                  </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                  <el-button @click="dialogModelVisible = false">取 消</el-button>
+                  <el-button type="primary" @click="createmodel">确 定</el-button>
+                </div>
+              </el-dialog>
               <el-dropdown-item @click.native="logoutHandle()">
                 退出
               </el-dropdown-item>
@@ -59,8 +107,18 @@
 export default {
   data () {
     return {
-      updatePassowrdVisible: false
+      userform: {
+        username: '',
+        password: '',
+        newPassword: '',
+        newPasswordAgain: ''
+      },
+      updatePassowrdVisible: false,
+      dialogModelVisible: false
     }
+  },
+  created () {
+    this.userform.username = this.$store.state.user.name
   },
   computed: {
     navbarLayoutType: {
@@ -76,10 +134,6 @@ export default {
         this.$store.commit('common/updateSidebarFold', val)
       }
     },
-    // mainTabs: {
-    //   get () { return this.$store.state.common.mainTabs },
-    //   set (val) { this.$store.commit('common/updateMainTabs', val) }
-    // },
     userName: {
       get () {
         return this.$store.state.user.name
@@ -87,6 +141,35 @@ export default {
     }
   },
   methods: {
+    createmodel () {
+      var url = this.dfp_url + '/dfplatform/updatePassword'
+      this.$axios
+        .post(url, {
+          isupdate: true,
+          newPassword: this.userform.newPassword,
+          newPasswordAgain: this.userform.newPasswordAgain,
+          password: this.userform.password,
+          username: this.$store.state.user.name
+        })
+        .then(res => {
+          var datas = res.data
+          if (datas.code === 0) {
+            this.dialogModelVisible = false
+            this.$message({
+              message: '密码修改成功',
+              type: 'success'
+            })
+          } else {
+            this.$message({
+              message: datas.message,
+              type: 'fail'
+            })
+          }
+        })
+        .catch(err => {
+          this.$message.error(err.response.data.message)
+        })
+    },
     // 退出
     logoutHandle () {
       this.$confirm(`确定进行[退出]操作?`, '提示', {
