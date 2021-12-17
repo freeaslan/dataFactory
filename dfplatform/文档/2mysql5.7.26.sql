@@ -17,6 +17,8 @@ CREATE TABLE `dfp_apis` (
   `summary` varchar(255) DEFAULT NULL,
   `header` text DEFAULT NULL,
   `request_body` text DEFAULT NULL,
+  `creator_id` int(11) DEFAULT NULL,
+  `modifier_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -46,6 +48,8 @@ CREATE TABLE `dfp_env_params` (
   `service_name` varchar(255) NOT NULL,
   `header` text,
   `host` text NOT NULL,
+  `creator_id` int(11) DEFAULT '0',
+  `modifier_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -56,6 +60,8 @@ CREATE TABLE `dfp_menu` (
   `parent_id` int(11) DEFAULT NULL COMMENT '父菜单ID，一级菜单为0',
   `icon` varchar(255) DEFAULT NULL,
   `type` int(11) DEFAULT NULL COMMENT '类型   0：目录   1：菜单   2：按钮',
+  `creator_id` int(11) DEFAULT '0',
+  `modifier_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -64,8 +70,19 @@ CREATE TABLE `dfp_module` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `project_name` varchar(255) DEFAULT NULL,
   `module_name` varchar(255) DEFAULT NULL,
+  `creator_id` int(11) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `dfp_opt_log`;
+CREATE TABLE `dfp_opt_log` (
+  `id` int(11)  NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) DEFAULT '0',
+  `operate_log` varchar(255) DEFAULT '',
+  `status` int(11) DEFAULT '0' COMMENT '0 成功，1失败',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
 
 DROP TABLE IF EXISTS `dfp_public_param`;
 CREATE TABLE `dfp_public_param` (

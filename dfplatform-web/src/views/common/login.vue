@@ -24,6 +24,13 @@
                     placeholder="密码"
                   >
                   </el-input>
+                  <el-button
+                    style="float: right; margin-right: 10px;color: #b10808;"
+                    type="text"
+                    @click="dialogModelVisible = true"
+                  >
+                    忘记密码
+                  </el-button>
                 </el-form-item>
                 <el-form-item>
                   <el-button
@@ -72,6 +79,43 @@
         </div>
       </div>
     </div>
+     <el-dialog append-to-body
+       title="忘记密码"
+       :visible.sync="dialogModelVisible"
+       size="tiny"
+       width="30%"
+     >
+       <el-form :model="userform" label-width="110px">
+         <el-form-item label="账号">
+           <el-input
+             size="mini"
+             v-model="userform.username"
+             placeholder="请输入账号"
+           >
+           </el-input>
+         </el-form-item>
+         <el-form-item label="新密码">
+           <el-input
+             size="mini"
+             v-model="userform.newPassword"
+             placeholder="请输入新密码"
+           >
+           </el-input>
+         </el-form-item>
+         <el-form-item label="再次输入新密码">
+           <el-input
+             size="mini"
+             v-model="userform.newPasswordAgain"
+             placeholder="再次输入新密码"
+           >
+           </el-input>
+         </el-form-item>
+       </el-form>
+       <div slot="footer" class="dialog-footer">
+         <el-button @click="dialogModelVisible = false">取 消</el-button>
+         <el-button type="primary" @click="createmodel">确 定</el-button>
+       </div>
+     </el-dialog>
   </div>
 </template>
 
@@ -79,6 +123,12 @@
 export default {
   data () {
     return {
+      userform: {
+        username: '',
+        newPassword: '',
+        newPasswordAgain: ''
+      },
+      dialogModelVisible: false,
       myWidth: window.innerWidth - 500 + 'px',
       dataForm: {
         userName: '',
@@ -100,6 +150,34 @@ export default {
     }
   },
   methods: {
+      createmodel () {
+        var url = this.dfp_url + '/dfplatform/updatePassword'
+        this.$axios
+          .post(url, {
+            isupdate: false,
+            newPassword: this.$md5(this.userform.newPassword),
+            newPasswordAgain: this.$md5(this.userform.newPasswordAgain),
+            username: this.userform.username
+          })
+          .then(res => {
+            var datas = res.data
+            if (datas.code === 0) {
+              this.dialogModelVisible = false
+              this.$message({
+                message: '密码找回成功',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                message: datas.message,
+                type: 'fail'
+              })
+            }
+          })
+          .catch(err => {
+            this.$message.error(err.response.data.message)
+          })
+      },
     // 提交表单
     dataFormSubmit () {
       let _this = this

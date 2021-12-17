@@ -21,23 +21,6 @@ import java.util.List;
 @Slf4j
 public class DynamicInvokeUtil {
 
-    public static void main(String[] args) {
-
-        DfpPublicParamBO dfpPublicParamModel = new DfpPublicParamBO();
-        dfpPublicParamModel.setParamKey("licenseNumber");
-        dfpPublicParamModel.setParamClassPath("com.esign.service.tmsdefender.util.RandomUtil");
-        dfpPublicParamModel.setParamClassType("class");
-        dfpPublicParamModel.setJarName("RandomUtil.class");
-        dfpPublicParamModel.setParamClassMethod("IDString");
-        dfpPublicParamModel.setParamClassParamsData("String：4");
-        dfpPublicParamModel.setActualValue("");
-        try {
-            System.err.println(dynamicinvoke(dfpPublicParamModel).toString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * 动态加载

@@ -85,7 +85,7 @@
                   >自定义</el-button
                 >
               </el-col>
-              <el-col :span="5">
+              <!--<el-col :span="5">
                 <el-tooltip
                   class="item"
                   effect="dark"
@@ -122,7 +122,7 @@
                     </div>
                   </el-upload>
                 </el-dialog>
-              </el-col>
+              </el-col-->
             </el-row>
           </el-form>
         </div>

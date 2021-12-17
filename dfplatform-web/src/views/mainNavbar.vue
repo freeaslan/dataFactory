@@ -45,9 +45,9 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-button
-                style="float: right; margin-right: 10px"
+                style="float: right; margin-right: 10px;color: #606266;"
                 type="text"
-                @click=";(dialogModelVisible = true), (userform.username = '')"
+                @click="dialogModelVisible = true"
               >
                 修改密码
               </el-button>
@@ -155,7 +155,9 @@ export default {
             this.$message({
               message: '密码修改成功',
               type: 'success'
-            })
+            }),
+            localStorage.removeItem('user'),
+            this.$router.push({ name: 'login' })
           } else {
             this.$message({
               message: datas.message,
