@@ -111,7 +111,7 @@ export default {
       },
       updatePassowrdVisible: false,
       dialogModelVisible: false,
-      dfp_url: window.SITE_CONFIG.baseUrl,
+      dfp_url: window.SITE_CONFIG.baseUrl
     }
   },
   created () {
@@ -155,8 +155,8 @@ export default {
             this.$message({
               message: '密码修改成功',
               type: 'success'
-            }),
-            localStorage.removeItem('user'),
+            })
+            localStorage.removeItem('user')
             this.$router.push({ name: 'login' })
           } else {
             this.$message({

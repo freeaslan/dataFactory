@@ -1,13 +1,13 @@
 set names utf8;
 
-INSERT INTO `dfp_apis` VALUES ('1', 'example', 'demo', '/dfplatform/addMenu', 'you server ip:8180', 'post', 'dfp-menu-controller', '创建目录和菜单', null, null);
-INSERT INTO `dfp_apis` VALUES ('2', 'example', 'demo', '/dfplatform/addModule', 'you server ip:8180', 'post', 'dfp-module-controller', '新增模块', null, null);
+INSERT INTO `dfp_apis` VALUES ('1', 'example', 'demo', '/dfplatform/addMenu', 'you server ip:8180', 'post', 'dfp-menu-controller', '创建目录和菜单', null, null,0,0);
+INSERT INTO `dfp_apis` VALUES ('2', 'example', 'demo', '/dfplatform/addModule', 'you server ip:8180', 'post', 'dfp-module-controller', '新增模块', null, null,0,0);
 
-INSERT INTO `dfp_menu` VALUES ('1', 'demo', '0', 'shoucang', '0');
-INSERT INTO `dfp_menu` VALUES ('2', 'example', '1', 'zhedie', '1');
-INSERT INTO `dfp_menu` VALUES ('3', '环境配置', '1', 'shezhi', '2');
+INSERT INTO `dfp_menu` VALUES ('1', 'demo', '0', 'shoucang', '0',0,0);
+INSERT INTO `dfp_menu` VALUES ('2', 'example', '1', 'zhedie', '1',0,0);
+INSERT INTO `dfp_menu` VALUES ('3', '环境配置', '1', 'shezhi', '2',0,0);
 
-INSERT INTO `dfp_module` VALUES ('1', 'example', 'demo');
+INSERT INTO `dfp_module` VALUES ('1', 'example', 'demo',0);
 
 INSERT INTO `dfp_public_param` VALUES ('1', 'jarDemo', 'jar', 'IDString', 'com.tsign.RandomUtil', 'String:123', 'jarDemo.jar', '1', '1', '1', '1');
 INSERT INTO `dfp_public_param` VALUES ('2', 'classDemo', 'class', 'ChineseString', 'com.esign.service.tmsdefender.util.RandomUtil', 'int:4', 'RandomUtil.class', '1', '1', '1', '1');

@@ -82,7 +82,7 @@ CREATE TABLE `dfp_opt_log` (
   `status` int(11) DEFAULT '0' COMMENT '0 成功，1失败',
   `create_time` datetime DEFAULT NULL COMMENT '创建时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `dfp_public_param`;
 CREATE TABLE `dfp_public_param` (

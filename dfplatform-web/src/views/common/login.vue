@@ -150,34 +150,34 @@ export default {
     }
   },
   methods: {
-      createmodel () {
-        var url = this.dfp_url + '/dfplatform/updatePassword'
-        this.$axios
-          .post(url, {
-            isupdate: false,
-            newPassword: this.$md5(this.userform.newPassword),
-            newPasswordAgain: this.$md5(this.userform.newPasswordAgain),
-            username: this.userform.username
-          })
-          .then(res => {
-            var datas = res.data
-            if (datas.code === 0) {
-              this.dialogModelVisible = false
-              this.$message({
-                message: '密码找回成功',
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: datas.message,
-                type: 'fail'
-              })
-            }
-          })
-          .catch(err => {
-            this.$message.error(err.response.data.message)
-          })
-      },
+    createmodel () {
+      var url = this.dfp_url + '/dfplatform/updatePassword'
+      this.$axios
+        .post(url, {
+          isupdate: false,
+          newPassword: this.$md5(this.userform.newPassword),
+          newPasswordAgain: this.$md5(this.userform.newPasswordAgain),
+          username: this.userform.username
+        })
+        .then(res => {
+          var datas = res.data
+          if (datas.code === 0) {
+            this.dialogModelVisible = false
+            this.$message({
+              message: '密码找回成功',
+              type: 'success'
+            })
+          } else {
+            this.$message({
+              message: datas.message,
+              type: 'fail'
+            })
+          }
+        })
+        .catch(err => {
+          this.$message.error(err.response.data.message)
+        })
+    },
     // 提交表单
     dataFormSubmit () {
       let _this = this
