@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * @Author: huangtai
+ * @Author: houlandong
  * @Description: 服务启动类
  * @Date: 2020/9/4 14:02
  */
